@@ -18,7 +18,6 @@ func (app *application) ShowPage(w http.ResponseWriter, r *http.Request) {
 	app.render(w, fmt.Sprintf("%s.page.gohtml", page), nil)
 }
 
-
 func (app *application) CreateDogFromFactory(w http.ResponseWriter, r *http.Request) {
 	var t toolbox.Tools
 	_ = t.WriteJSON(w, http.StatusOK, pets.NewPet("dog"))
@@ -51,4 +50,14 @@ func (app *application) CreateCatFromAbstractFactory(w http.ResponseWriter, r *h
 		return
 	}
 	_ = t.WriteJSON(w, http.StatusOK, cat)
+}
+
+func (app *application) GetAllDogBreedsJSON(w http.ResponseWriter, r *http.Request) {
+	var t toolbox.Tools
+	dogBreeds, err := app.Models.DogBreed.All()
+	if err != nil {
+		_ = t.ErrorJSON(w, err, http.StatusBadRequest)
+		return
+	}
+	_ = t.WriteJSON(w, http.StatusOK, dogBreeds)
 }
